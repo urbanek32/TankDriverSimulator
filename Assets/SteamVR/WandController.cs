@@ -6,26 +6,36 @@ public class WandController : MonoBehaviour {
 	Valve.VR.EVRButtonId gripButton = Valve.VR.EVRButtonId.k_EButton_Grip;
 	Valve.VR.EVRButtonId triggerButton = Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger;
 
+	Valve.VR.EVRButtonId padUpButton = Valve.VR.EVRButtonId.k_EButton_DPad_Up;
+
 	SteamVR_TrackedObject trackedObj;
 	//SteamVR_Controller.Device controller { get { return SteamVR_Controller.Input((int)trackedObj.index); } }
 
 	GameObject pickup;
 
 	public RTCTankController TankCtrl;
+	public RTCTankGunController TankGunCtrl;
 
 
 	SteamVR_Controller.Device rightDevice;
 	SteamVR_Controller.Device leftDevice;
+	SteamVR_TrackedController controller;
+
+	int leftIndex;
+	int rightIndex;
 
 	// Use this for initialization
 	void Start () {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 
-		int rightIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
-		int leftIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
+		rightIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
+		leftIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
 
 		rightDevice = SteamVR_Controller.Input(rightIndex);
 		leftDevice = SteamVR_Controller.Input(leftIndex);
+
+		controller = GetComponent<SteamVR_TrackedController>();
+
 	}
 	
 	// Update is called once per frame
@@ -69,6 +79,24 @@ public class WandController : MonoBehaviour {
 			Debug.Log ("trigger up");
 			TankCtrl.steerInput = 0;
 		}
+
+		TankGunCtrl.IsGunRotating = controller.padPressed;
+		if (controller.controllerIndex == leftIndex) {
+			if (controller.padPressed) {
+				Debug.Log ("L pad up");
+
+				TankGunCtrl.rigid.AddRelativeTorque (0, (-100) * Mathf.Abs (1), 0, ForceMode.Force);
+				//TankGunCtrl.LastRotation = TankGunCtrl.transform.rotation;
+			} else {
+				TankGunCtrl.LastRotation = TankGunCtrl.rigid.rotation;
+			}
+		}
+		if (controller.controllerIndex == rightIndex) {
+			if (controller.padPressed) {
+				Debug.Log ("R pad up");
+			}
+		}
+
 	}
 
 	void OnTriggerEnter(Collider coll) {
@@ -79,5 +107,9 @@ public class WandController : MonoBehaviour {
 	void OnTriggerExit(Collider coll) {
 		pickup = null;
 		Debug.Log ("exit");
+	}
+
+	void OnPadClicked(object sender, ClickedEventArgs e){
+		Debug.Log ("Pad Clicked! X: " + e.padX + " " + e.padY);
 	}
 }

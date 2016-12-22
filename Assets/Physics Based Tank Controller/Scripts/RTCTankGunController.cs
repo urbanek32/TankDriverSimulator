@@ -6,7 +6,7 @@ using System.Collections;
 
 public class RTCTankGunController : MonoBehaviour {
 
-	private Rigidbody rigid;
+	public Rigidbody rigid;
 
 	public GameObject tank;
 	public GameObject barrel;
@@ -42,6 +42,8 @@ public class RTCTankGunController : MonoBehaviour {
 	public GameObject groundSmoke;
 	public GameObject fireSmoke;
 
+	public bool IsGunRotating = false;
+	public Quaternion LastRotation;
 
 	void Start () {
 
@@ -58,6 +60,8 @@ public class RTCTankGunController : MonoBehaviour {
 			col.transform.gameObject.tag = "Player";
 		}
 
+		LastRotation = transform.root.rotation;
+
 	}
 
 	void Update(){
@@ -70,7 +74,9 @@ public class RTCTankGunController : MonoBehaviour {
 
 	void FixedUpdate () {
 
-		rigid.rotation = transform.root.rotation;
+		if (!IsGunRotating) {
+			rigid.rotation = LastRotation; 
+		}
 
 		/*if(transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 180)
 			rotationOfTheGun = transform.localEulerAngles.y;
