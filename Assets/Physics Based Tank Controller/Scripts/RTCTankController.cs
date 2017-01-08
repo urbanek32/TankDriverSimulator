@@ -15,7 +15,7 @@ public class RTCTankController : MonoBehaviour {
 
 
 	//Rigidbody.
-	private Rigidbody rigid;
+	public Rigidbody rigid;
 
 	//Reversing Bool.
 	private bool reversing = false;

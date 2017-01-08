@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody))]
-[RequireComponent (typeof (HingeJoint))]
+//[RequireComponent (typeof (HingeJoint))]
 
 public class RTCTankGunController : MonoBehaviour {
 
@@ -44,6 +44,7 @@ public class RTCTankGunController : MonoBehaviour {
 
 	public bool IsGunRotating = false;
 	public Quaternion LastRotation;
+    public RTCTankController TankCtrl;
 
 	void Start () {
 
@@ -74,9 +75,9 @@ public class RTCTankGunController : MonoBehaviour {
 
 	void FixedUpdate () {
 
-		if (!IsGunRotating) {
+		/*if (!IsGunRotating) {
 			rigid.rotation = LastRotation; 
-		}
+		}*/
 
 		/*if(transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 180)
 			rotationOfTheGun = transform.localEulerAngles.y;
@@ -108,7 +109,7 @@ public class RTCTankGunController : MonoBehaviour {
 
 		loadingTime += Time.deltaTime;
 
-		if(Input.GetButtonDown("Fire1") && loadingTime > reloadTime && ammo > 0){
+		if(Input.GetButton("Jump") && loadingTime > reloadTime && ammo > 0){
 
 			rigid.AddForce(-transform.forward * recoilForce, ForceMode.VelocityChange);
 			Rigidbody shot = Instantiate(bullet, barrelOut.position, barrelOut.rotation) as Rigidbody;
@@ -138,9 +139,10 @@ public class RTCTankGunController : MonoBehaviour {
 
 	}
 	
-	void JointConfiguration(){
+	void JointConfiguration()
+    {
 
-		if(useLimitsForRotation){
+		/*if(useLimitsForRotation){
 
 			jointRotationLimit.min = -maximumRotationLimit;
 			jointRotationLimit.max = maximumRotationLimit;
@@ -151,8 +153,7 @@ public class RTCTankGunController : MonoBehaviour {
 
 			joint.useLimits = false;
 
-		}
-
+		}*/
 	}
 
 }
