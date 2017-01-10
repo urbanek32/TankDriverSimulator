@@ -66,7 +66,7 @@ public class RTCTankGunController : MonoBehaviour {
 
 	void Update(){
 
-		Shooting();
+		//Shooting();
 		JointConfiguration();
 
 	}
@@ -74,9 +74,6 @@ public class RTCTankGunController : MonoBehaviour {
 
 	void FixedUpdate () {
 
-		if (!IsGunRotating) {
-			rigid.rotation = LastRotation; 
-		}
 
 		/*if(transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 180)
 			rotationOfTheGun = transform.localEulerAngles.y;
@@ -104,11 +101,11 @@ public class RTCTankGunController : MonoBehaviour {
 */
 	}
 
-	void Shooting(){
+	public void Shooting(){
 
 		loadingTime += Time.deltaTime;
 
-		if(Input.GetButtonDown("Fire1") && loadingTime > reloadTime && ammo > 0){
+		if(loadingTime > reloadTime && ammo > 0) {
 
 			rigid.AddForce(-transform.forward * recoilForce, ForceMode.VelocityChange);
 			Rigidbody shot = Instantiate(bullet, barrelOut.position, barrelOut.rotation) as Rigidbody;
